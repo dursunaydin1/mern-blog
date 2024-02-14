@@ -1,7 +1,8 @@
 import User from "../models/user.model.js";
 import bcrypts from "bcryptjs";
+import { errorHandler } from "../utils/error.js";
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   //  body deki bilgileri alıyoruz.
   const { username, email, password } = req.body;
   // giriş kontrolu yapılıyor ...
@@ -13,7 +14,7 @@ export const signup = async (req, res) => {
     email == "" ||
     password == ""
   ) {
-    return res.status(400).json({ message: "Tüm alanları doldurunuz." });
+    next(errorHandler(400, "Lütfen bilgileri eksiksiz doldurunuz."));
   }
 
   //   parolayı hash ediyoruz.
@@ -32,6 +33,6 @@ export const signup = async (req, res) => {
     await newUser.save();
     res.json("Kullanıcı oluşturuldu.");
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
