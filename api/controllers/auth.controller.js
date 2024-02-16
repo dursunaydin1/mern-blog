@@ -21,16 +21,15 @@ export const signup = async (req, res, next) => {
   //   parolayı hash ediyoruz.
   const hashedPassword = bcrypts.hashSync(password, 10);
 
-  //   yeni bir kullanıcı oluşturmak için kullanıcı adı, email, parola bilgilerini alıyoruz.
+  //   yeni bir kullanıcı oluşturuyoruz.
   const newUser = new User({
     username,
     email,
     password: hashedPassword,
   });
 
-  //   yeni bir kullanıcı oluşturuyoruz.
-
   try {
+    //   veri tabanına kaydediyoruz.
     await newUser.save();
     res.json("Kullanıcı oluşturuldu.");
   } catch (err) {
@@ -52,14 +51,17 @@ export const signin = async (req, res, next) => {
   }
 
   try {
+    //   veri tabanından kullanıcıyı buluyoruz.
     const validUser = await User.findOne({ email });
     if (!validUser) {
       return next(errorHandler(404, "Kullanıcı bulunamadı."));
     }
+    //   parolayı hash ediyoruz.
     const validPassword = bcrypts.compareSync(password, validUser.password);
     if (!validPassword) {
       return next(errorHandler(401, "Hatalı parola."));
     }
+    //   token oluşturuyoruz.
     const token = jwt.sign(
       {
         id: validUser._id,
@@ -67,6 +69,7 @@ export const signin = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
+    //   cookie oluşturuyoruz.
     const { password: pass, ...rest } = validUser._doc;
     res
       .status(200)
@@ -74,6 +77,59 @@ export const signin = async (req, res, next) => {
         httpOnly: true,
       })
       .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  const { email, name, googlePhotoUrl } = req.body;
+  try {
+    //   veri tabanında kullanıcıyı buluyoruz.
+    const user = await User.findOne({ email });
+    if (user) {
+      //   token oluşturuyoruz.
+      const token = jwt.sign(
+        {
+          id: user._id,
+        },
+        process.env.JWT_SECRET
+      );
+      const { password: pass, ...rest } = user._doc;
+      // Kullanıcı bilgilerini dön ve cookie'ye tokeni ekliyoruz.
+      res
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json(rest);
+    } else {
+      // kullanıcı bulunamazsa yeni bir kullanıcı oluşturuyoruz.
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const handlePassword = bcrypts.hashSync(generatedPassword, 10);
+      const newUser = new User({
+        username:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
+        email,
+        password: handlePassword,
+        profilePicture: googlePhotoUrl,
+      });
+      await newUser.save();
+      // Yeni kullanıcı için JWT ile token oluşturuyoruz.
+      const token = jwt.sign(
+        {
+          id: newUser._id,
+        },
+        process.env.JWT_SECRET
+      );
+      const { password: pass, ...rest } = newUser._doc;
+      // Kullanıcı bilgilerini dön ve cookie'ye tokeni ekle
+      res
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json(rest);
+    }
   } catch (error) {
     next(error);
   }
