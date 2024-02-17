@@ -14,19 +14,20 @@ const Header = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await fetch("/api/auth/signout", {
+      const res = await fetch("/api/user/signout", {
         method: "POST",
       });
       const data = await res.json();
-      if (res.ok) {
-        console.log(data);
+      if (!res.ok) {
+        console.log(data.message);
       } else {
-        dispatch(signOutSuccess);
+        dispatch(signOutSuccess());
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
+
   return (
     <Navbar className="border-b-2">
       <Link

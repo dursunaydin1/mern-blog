@@ -17,19 +17,20 @@ const DashSidebar = () => {
   }, [location.search]);
   const handleSignOut = async () => {
     try {
-      const res = await fetch("/api/auth/signout", {
+      const res = await fetch("/api/user/signout", {
         method: "POST",
       });
       const data = await res.json();
-      if (res.ok) {
-        console.log(data);
+      if (!res.ok) {
+        console.log(data.message);
       } else {
-        dispatch(signOutSuccess);
+        dispatch(signOutSuccess());
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
+
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>

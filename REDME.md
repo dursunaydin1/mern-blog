@@ -26,4 +26,6 @@
 26-add delete user API route
 27-complete delete user account functionality
 28-add signout functionality
-29-
+29-add admin functionality to the user
+30-add admin functionality to the user
+31-

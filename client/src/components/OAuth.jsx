@@ -36,7 +36,7 @@ const OAuth = (app) => {
       if (res.ok) {
         dispatch(signInSuccess(data));
         navigation("/");
-        console.log(data);
+        // console.log(data);
       }
     } catch (error) {
       console.log(error);

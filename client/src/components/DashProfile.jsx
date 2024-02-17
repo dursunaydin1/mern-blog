@@ -148,19 +148,20 @@ const DashProfile = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await fetch("/api/auth/signout", {
+      const res = await fetch("/api/user/signout", {
         method: "POST",
       });
       const data = await res.json();
-      if (res.ok) {
-        console.log(data);
+      if (!res.ok) {
+        console.log(data.message);
       } else {
-        dispatch(signOutSuccess);
+        dispatch(signOutSuccess());
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
