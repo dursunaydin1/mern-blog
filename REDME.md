@@ -21,3 +21,4 @@
 21-complete sidebar af the dashboard
 22-complete profile page UI
 23-complete user image upload functionality
+24-add update user API route
