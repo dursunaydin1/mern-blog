@@ -50,3 +50,16 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// Delete User
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, "Bu kullanıcıyı silme yetkiniz yok"));
+  }
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json("Kullanıcı silindi");
+  } catch (error) {
+    next(error);
+  }
+};

@@ -22,3 +22,6 @@
 22-complete profile page UI
 23-complete user image upload functionality
 24-add update user API route
+25-complete update user profile page functionality
+26-add delete user API route
+27-
