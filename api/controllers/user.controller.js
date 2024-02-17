@@ -63,3 +63,18 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// Cikis yap
+export const signout = async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .cookie("access_token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      })
+      .json("Cikis yapildi");
+  } catch (error) {
+    next(error);
+  }
+};
