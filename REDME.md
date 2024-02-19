@@ -37,4 +37,5 @@
 37-show user posts inside dashboard
 38-add show more functionality to the posts results of the dashboard
 39-add delete post functionality to the dashboard
-40-
+40-add update post functionality
+41-
