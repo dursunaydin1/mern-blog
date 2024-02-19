@@ -35,4 +35,5 @@
 35-add posts section to the dashboard
 36-create get posts API route
 37-show user posts inside dashboard
-38-
+38-add show more functionality to the posts results of the dashboard
+39-
