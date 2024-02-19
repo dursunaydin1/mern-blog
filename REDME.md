@@ -32,4 +32,5 @@
 32-add create a post API route
 33-complete upload post image functionality
 34-complete create post functionality
-35-
+35-add posts section to the dashboard
+36-
