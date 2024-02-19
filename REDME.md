@@ -34,4 +34,5 @@
 34-complete create post functionality
 35-add posts section to the dashboard
 36-create get posts API route
-37-
+37-show user posts inside dashboard
+38-
