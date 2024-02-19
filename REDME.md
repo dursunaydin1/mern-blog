@@ -30,4 +30,5 @@
 30-add admin functionality to the user
 31-complate create a post page UI
 32-add create a post API route
-33-
+33-complete upload post image functionality
+34-
